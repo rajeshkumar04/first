@@ -1,0 +1,22 @@
+import jwt from 'jsonwebtoken';
+
+const middleware = (req,res , next) =>
+{
+    try
+    {
+            let token = req.header("x-token");
+            if(!token)
+            {
+                return  res.status(400).send("token not found");
+            }
+            let decode = jwt.verify(token,"jwtsecure")
+             req.user = decode.user
+             next();
+    }
+    catch(err)
+    {
+        console.log(err.message)
+        return res.status(500).send("Invalid token")
+    }
+}
+export default middleware;
